@@ -31,12 +31,12 @@ steps:
           terraform validate
 
  - id: tfsec
-  name: aquasec/tfsec:latest
-  dir: terraform
-  entrypoint: sh
-  args:
-    - -c
-    - |
+   name: aquasec/tfsec:latest
+   dir: terraform
+   entrypoint: sh
+   args:
+     - '-c'
+     - |
         tfsec .
         
   - id: 'tf-plan'
