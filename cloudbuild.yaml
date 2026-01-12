@@ -30,15 +30,6 @@ steps:
       - |
           terraform validate
 
-  - id: tflint
-  name: ghcr.io/terraform-linters/tflint:latest
-  dir: terraform
-  entrypoint: sh
-  args:
-    - -c
-    - |
-        tflint --init
-
  - id: tfsec
   name: aquasec/tfsec:latest
   dir: terraform
