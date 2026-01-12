@@ -5,8 +5,8 @@ resource "google_compute_instance" "vm" {
 
   boot_disk {
     initialize_params {
-      image = "Ubuntu 25.10 Minimal"
-      size  = 10
+      image = "ubuntu-os-cloud/ubuntu-2204-lts"
+      size  = 20
       type  = "pd-balanced"
     }
   }
