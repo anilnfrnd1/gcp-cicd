@@ -2,7 +2,9 @@ resource "google_compute_instance" "vm" {
   name         = "terraform-vm-cicd"
   machine_type = var.machine_type
   zone         = var.zone
+
   allow_stopping_for_update = true
+
   boot_disk {
     initialize_params {
       image = "ubuntu-os-cloud/ubuntu-2204-lts"
@@ -13,7 +15,15 @@ resource "google_compute_instance" "vm" {
 
   network_interface {
     network = "default"
+    # no public IP
+  }
 
-    access_config {} #  Ephemeral public IP
+  metadata = {
+    block-project-ssh-keys = "true"
+  }
+
+  shielded_instance_config {
+    enable_vtpm                 = true
+    enable_integrity_monitoring = true
   }
 }
