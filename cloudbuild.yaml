@@ -29,7 +29,25 @@ steps:
       - '-c'
       - |
           terraform validate
-          
+
+  - id: tflint
+  name: ghcr.io/terraform-linters/tflint:latest
+  dir: terraform
+  entrypoint: sh
+  args:
+    - -c
+    - |
+        tflint --init
+
+ - id: tfsec
+  name: aquasec/tfsec:latest
+  dir: terraform
+  entrypoint: sh
+  args:
+    - -c
+    - |
+        tfsec .
+        
   - id: 'tf-plan'
     name: 'hashicorp/terraform:1.6'
     dir: terraform
