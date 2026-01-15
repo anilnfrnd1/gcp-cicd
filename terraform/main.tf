@@ -19,6 +19,7 @@ resource "google_compute_instance" "vm" {
   }
 
  metadata = {
+    block-project-ssh-keys = "true"
     ssh-keys = "${var.ssh_user}:${var.ssh_public_key}"
   }
 
