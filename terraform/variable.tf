@@ -18,3 +18,13 @@ variable "machine_type" {
   type        = string
   default     = "e2-medium"
 }
+
+variable "ssh_user" {
+  description = "Linux SSH username"
+  type        = string
+}
+
+variable "ssh_public_key" {
+  description = "SSH public key contents"
+  type        = string
+}

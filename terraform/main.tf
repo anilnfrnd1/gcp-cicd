@@ -15,15 +15,10 @@ resource "google_compute_instance" "vm" {
 
   network_interface {
     network = "default"
-    # no public IP
   }
 
   metadata = {
     block-project-ssh-keys = "true"
-  }
-
-  shielded_instance_config {
-    enable_vtpm                 = true
-    enable_integrity_monitoring = true
+    ssh-keys               = "${var.ssh_user}:${var.ssh_public_key}"
   }
 }
