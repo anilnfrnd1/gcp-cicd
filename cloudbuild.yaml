@@ -37,7 +37,7 @@ steps:
     args:
         - '-c'
         - |
-            tfsec --severity HIGH,CRITICAL .
+            tfsec -m HIGH,CRITICAL .
         
   - id: 'tf-plan'
     name: 'hashicorp/terraform:1.6'
