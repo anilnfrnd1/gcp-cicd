@@ -55,4 +55,9 @@ steps:
     args:
       - '-c'
       - |
-          terraform apply -auto-approve -input=false
+          if [ "$BRANCH_NAME" = "main" ]; then
+            echo " Applying Terraform on protected branch: $BRANCH_NAME"
+            terraform apply -auto-approve -input=false
+          else
+            echo "Skipping terraform apply on branch: $BRANCH_NAME"
+          fi
