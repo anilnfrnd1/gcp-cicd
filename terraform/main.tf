@@ -18,8 +18,8 @@ resource "google_compute_instance" "vm" {
     # no public IP
   }
 
-  metadata = {
-    block-project-ssh-keys = "true"
+ metadata = {
+    ssh-keys = "${var.ssh_user}:${var.ssh_public_key}"
   }
 
   shielded_instance_config {
