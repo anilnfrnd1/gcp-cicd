@@ -11,6 +11,7 @@ steps:
           echo "********************"
           echo "Branch: $BRANCH_NAME"
           echo "********************"
+          
   - id: tf-fmt
     name: hashicorp/terraform:1.6
     entrypoint: sh
