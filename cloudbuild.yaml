@@ -13,7 +13,7 @@ steps:
           echo "********************"
           
   - id: tf-fmt
-    name: 'hashicorp/terraform:1.6'
+    name: 'hashicorp/terraform:1.14'
     entrypoint: sh
     dir: terraform
     args:
@@ -21,16 +21,17 @@ steps:
       - terraform fmt -check -recursive
       
   - id: 'tf-init'
-    name: 'hashicorp/terraform:1.6'
+    name: 'hashicorp/terraform:1.14'
     dir: terraform
     entrypoint: 'sh'
     args:
       - '-c'
       - |
-          terraform init -input=false
+
+      terraform init -input=false 
 
   - id: 'tf-validate'
-    name: 'hashicorp/terraform:1.6'
+    name: 'hashicorp/terraform:1.14'
     dir: terraform
     entrypoint: 'sh'
     args:
@@ -48,16 +49,18 @@ steps:
             tfsec -m HIGH .
         
   - id: 'tf-plan'
-    name: 'hashicorp/terraform:1.6'
+    name: 'hashicorp/terraform:1.14'
     dir: terraform
     entrypoint: 'sh'
     args:
       - '-c'
       - |
-          terraform plan -input=false
+       set -e
+       TFPLAN="tfplan-${BRANCH_NAME}-${SHORT_SHA}"
+       terraform plan -input=false -out="${TFPLAN}"
 
   - id: 'tf-apply'
-    name: 'hashicorp/terraform:1.6'
+    name: 'hashicorp/terraform:1.14'
     dir: terraform
     entrypoint: 'sh'
     args:
@@ -65,7 +68,7 @@ steps:
       - |
           if [ "$BRANCH_NAME" = "main" ]; then
             echo " Applying Terraform on protected branch: $BRANCH_NAME"
-            terraform apply -auto-approve -input=false
+            terraform apply "${TFPLAN}" -auto-approve -input=false 
           else
             echo "Skipping terraform apply on branch: $BRANCH_NAME"
           fi
