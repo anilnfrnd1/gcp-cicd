@@ -11,7 +11,13 @@ steps:
           echo "********************"
           echo "Branch: $BRANCH_NAME"
           echo "********************"
-
+  - id: tf-fmt
+    name: hashicorp/terraform:1.6
+    entrypoint: sh
+    args:
+      - '-c'
+      - terraform fmt -check -recursive
+      
   - id: 'tf-init'
     name: 'hashicorp/terraform:1.6'
     dir: terraform
@@ -20,13 +26,6 @@ steps:
       - '-c'
       - |
           terraform init -input=false
-
-  - id: tf-fmt
-    name: hashicorp/terraform:1.6
-    entrypoint: sh
-    args:
-      - '-c'
-      - terraform fmt -check -recursive
 
   - id: 'tf-validate'
     name: 'hashicorp/terraform:1.6'
