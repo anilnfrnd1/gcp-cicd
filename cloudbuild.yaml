@@ -13,7 +13,7 @@ steps:
           echo "********************"
           
   - id: tf-fmt
-    name: hashicorp/terraform:1.14
+    name: 'hashicorp/terraform:1.6'
     entrypoint: sh
     dir: terraform
     args:
