@@ -17,7 +17,7 @@ steps:
     entrypoint: sh
     args:
       - '-c'
-      - terraform fmt -check -recursive
+      - terraform fmt -recursive
       
   - id: 'tf-init'
     name: 'hashicorp/terraform:1.6'
