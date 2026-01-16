@@ -15,6 +15,7 @@ steps:
   - id: tf-fmt
     name: hashicorp/terraform:1.14
     entrypoint: sh
+    dir: terraform
     args:
       - '-c'
       - terraform fmt -recursive
