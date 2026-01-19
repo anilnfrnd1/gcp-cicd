@@ -55,9 +55,9 @@ steps:
     args:
       - '-c'
       - |
-        set -e
-        TFPLAN="tfplan-${BRANCH_NAME}-${SHORT_SHA}"
-        terraform plan -out="${TFPLAN}"
+        substitutions:
+         _TFPLAN="tfplan-${BRANCH_NAME}-${SHORT_SHA}"
+        terraform plan -out="$_TFPLAN"
 
   - id: 'tf-apply'
     name: 'hashicorp/terraform:1.14'
@@ -68,7 +68,7 @@ steps:
       - |
           if [ "$BRANCH_NAME" = "main" ]; then
             echo " Applying Terraform on protected branch: $BRANCH_NAME"
-            terraform apply "${TFPLAN}" -auto-approve -input=false 
+            terraform apply "$_TFPLAN" -auto-approve -input=false 
           else
             echo "Skipping terraform apply on branch: $BRANCH_NAME"
           fi
