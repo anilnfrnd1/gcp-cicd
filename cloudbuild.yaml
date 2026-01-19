@@ -57,7 +57,7 @@ steps:
       - |
        set -e
        TFPLAN="tfplan-${BRANCH_NAME}-${SHORT_SHA}"
-       terraform plan -input=false -out="${TFPLAN}"
+       terraform plan -out="${TFPLAN}"
 
   - id: 'tf-apply'
     name: 'hashicorp/terraform:1.14'
