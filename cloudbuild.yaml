@@ -28,7 +28,7 @@ steps:
       - '-c'
       - |
 
-      terraform init -input=false 
+        terraform init -input=false 
 
   - id: 'tf-validate'
     name: 'hashicorp/terraform:1.14'
