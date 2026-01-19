@@ -68,7 +68,7 @@ steps:
       - |
           if [ "$BRANCH_NAME" = "main" ]; then
             echo " Applying Terraform on protected branch: $BRANCH_NAME"
-            terraform apply "$_TFPLAN" -auto-approve -input=false 
+            terraform apply "$_TFPLAN" -auto-approve  
           else
             echo "Skipping terraform apply on branch: $BRANCH_NAME"
           fi
