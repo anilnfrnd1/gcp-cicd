@@ -1,0 +1,95 @@
+name: 
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+env:
+  TF_VERSION: "1.14"
+  TF_WORKING_DIR: terraform
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: github-runner
+
+    steps:
+      # ---------------------------
+      # 1. Checkout code
+      # ---------------------------
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ---------------------------
+      # 2. Print branch
+      # ---------------------------
+      - name: Print branch
+        run: |
+          echo "********************"
+          echo "Branch: ${GITHUB_REF_NAME}"
+          echo "********************"
+
+      # ---------------------------
+      # 3. Setup Terraform
+      # ---------------------------
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      # ---------------------------
+      # 4. Terraform fmt
+      # ---------------------------
+      - name: Terraform fmt
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform fmt -check -recursive
+
+      # ---------------------------
+      # 5. Terraform init
+      # ---------------------------
+      - name: Terraform init
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform init -input=false
+
+      # ---------------------------
+      # 6. Terraform validate
+      # ---------------------------
+      - name: Terraform validate
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform validate
+
+      # ---------------------------
+      # 7. tfsec scan
+      # ---------------------------
+      - name: tfsec
+        uses: aquasecurity/tfsec-action@v1.0.3
+        with:
+          working_directory: ${{ env.TF_WORKING_DIR }}
+          severity: HIGH
+
+      # ---------------------------
+      # 8. Terraform plan
+      # ---------------------------
+      - name: Terraform plan
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: |
+          TFPLAN=tfplan-${GITHUB_REF_NAME}-${GITHUB_SHA}
+          echo "TFPLAN=$TFPLAN" >> $GITHUB_ENV
+          terraform plan -out=$TFPLAN
+
+      # ---------------------------
+      # 9. Terraform apply (main only)
+      # ---------------------------
+      - name: Terraform apply
+        if: github.ref_name == 'main'
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: |
+          echo "Applying Terraform on protected branch: main"
+          terraform apply -auto-approve "$TFPLAN"
