@@ -50,7 +50,7 @@ steps:
     - -c
     - |
       terraform workspace select "${_ENV}" \
-      || terraform workspace new "${_ENV}"
+       || terraform workspace new "${_ENV}"
 
 # -------------------------
 # Validate
