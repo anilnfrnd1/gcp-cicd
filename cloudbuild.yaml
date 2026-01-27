@@ -37,7 +37,7 @@ steps:
       - '-c'
       - |
          terraform init -input=false \
-        -backend-config="prefix=env/${_ENV}"
+         -backend-config="prefix=env/${_ENV}"
 
 # -------------------------
 # Workspace Select/Create
