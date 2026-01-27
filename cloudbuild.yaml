@@ -40,19 +40,6 @@ steps:
          -backend-config="prefix=env/${_ENV}"
 
 # -------------------------
-# Workspace Select/Create
-# -------------------------
-  - id: tf-workspace
-    name: hashicorp/terraform:1.14
-    dir: terraform
-    entrypoint: sh
-    args:
-      - -c
-      - |
-        terraform workspace select "${_ENV}" \
-         || terraform workspace new "${_ENV}"
-
-# -------------------------
 # Validate
 # -------------------------      
   - id: 'tf-validate'
