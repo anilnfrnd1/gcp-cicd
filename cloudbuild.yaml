@@ -2,7 +2,7 @@ options:
   logging: CLOUD_LOGGING_ONLY
 
 substitutions:
- _ENV: stage
+ _ENV: "$BRANCH_NAME"
 # -------------------------
 # Print the current branch
 # -------------------------
