@@ -2,7 +2,7 @@ options:
   logging: CLOUD_LOGGING_ONLY
 
 substitutions:
- _ENV: dev
+ _ENV: stage
 # -------------------------
 # Print the current branch
 # -------------------------
