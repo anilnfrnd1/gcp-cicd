@@ -27,7 +27,15 @@ jobs:
       # ---------------------------
       - name: Checkout
         uses: actions/checkout@v4
-
+        
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v0.4.0'
+        with:
+          token_format: 'access_token'
+          workload_identity_provider: 'projects/865252980138/locations/global/workloadIdentityPools/githubaction/providers/github'
+          service_account: 'githubaction@disco-bedrock-483611-k9.iam.gserviceaccount.com'
+          
       # ---------------------------
       # 2. Print branch
       # ---------------------------
