@@ -19,7 +19,7 @@ env:
   TF_WORKING_DIR: terraform
 jobs:
   build:
-    runs-on: github-runner
+    runs-on: ubuntu-24.04
 
     steps:
       # ---------------------------
