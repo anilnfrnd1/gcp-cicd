@@ -82,7 +82,6 @@ jobs:
         working-directory: ${{ env.TF_WORKING_DIR }}
         run: |
           TFPLAN=tfplan-${GITHUB_REF_NAME}-${GITHUB_SHA}
-          echo "TFPLAN=$TFPLAN" >> $GITHUB_ENV
           terraform plan -out=$TFPLAN
 
       # ---------------------------
