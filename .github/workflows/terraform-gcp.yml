@@ -4,7 +4,7 @@ name: First pipeline
 on:
  push:
     branches:
-     - prod
+     - main
      - dev
      - stage
  pull_request:
