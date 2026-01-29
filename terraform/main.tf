@@ -1,5 +1,5 @@
 resource "google_compute_instance" "vm" {
-  name         = "terraform-vm-cicd"
+  name         = "terraform-vm-cicd1"
   machine_type = var.machine_type
   zone         = var.zone
 
