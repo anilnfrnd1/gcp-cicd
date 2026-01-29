@@ -1,24 +1,5 @@
-resource "google_compute_instance" "vm" {
-  name         = "terraform-vm-cicd"
-  machine_type = var.machine_type
-  zone         = var.zone
 
-  allow_stopping_for_update = true
-
-  boot_disk {
-    initialize_params {
-      image = "ubuntu-os-cloud/ubuntu-2204-lts"
-      size  = 20
-      type  = "pd-balanced"
-    }
-  }
-
-  network_interface {
-    network = "default"
-  }
-
-  metadata = {
-    block-project-ssh-keys = "true"
-    ssh-keys               = "${var.ssh_user}:${var.ssh_public_key}"
-  }
+resource "google_storage_bucket" "my_first_bucket" {
+  name     = "first"
+  location = "var.zone"
 }
