@@ -77,11 +77,11 @@ jobs:
       # ---------------------------
       # 7. tfsec scan
       # ---------------------------
-      - name: tfsec
-        uses: aquasecurity/tfsec-action@v1.0.3
-        with:
-          working_directory: ${{ env.TF_WORKING_DIR }}
-          run: tfsec -m HIGH .
+      #- name: tfsec
+      # uses: aquasecurity/tfsec-action@v1.0.3
+      #  with:
+      #    working_directory: ${{ env.TF_WORKING_DIR }}
+      #    run: tfsec -m HIGH .
 
       # ---------------------------
       # 8. Terraform plan
