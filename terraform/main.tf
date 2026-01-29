@@ -1,24 +1,24 @@
-resource "google_storage_bucket" "my_first_bucket" {
-  name          = "my-unique-bucket-name-2026" # Must be globally unique
-  location      = "US-CENTRAL1"               # Use lowercase for regions, uppercase for multi-regions
-  force_destroy = true                        # Allows 'terraform destroy' to delete non-empty buckets
+resource "google_compute_instance" "vm" {
+  name         = "terraform-vm-cicd"
+  machine_type = var.machine_type
+  zone         = var.zone
 
-  # Security: Prevent accidental public exposure
-  public_access_prevention = "enforced"
+  allow_stopping_for_update = true
 
-  # Reliability: Keep history of your files
-  versioning {
-    enabled = true
+  boot_disk {
+    initialize_params {
+      image = "ubuntu-os-cloud/ubuntu-2204-lts"
+      size  = 20
+      type  = "pd-balanced"
+    }
   }
 
-  # Cost Management: Move files to Nearline storage after 30 days
-  lifecycle_rule {
-    condition {
-      age = 30
-    }
-    action {
-      type = "set_storage_class"
-      storage_class = "NEARLINE"
-    }
+  network_interface {
+    network = "default"
+  }
+
+  metadata = {
+    block-project-ssh-keys = "true"
+    ssh-keys               = "${var.ssh_user}:${var.ssh_public_key}"
   }
 }
