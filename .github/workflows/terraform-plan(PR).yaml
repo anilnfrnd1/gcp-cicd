@@ -1,0 +1,71 @@
+name: Terraform Plan (PR)
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pull-requests: write
+  id-token: write
+
+env:
+  ENV: dev
+  TF_VERSION: "1.6.6"
+  TF_WORKING_DIR: terraform
+  TF_PLAN_NAME: tfplan-pr-${{ github.event.pull_request.number }}-${{ github.sha }}.out
+  
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v0.4.0'
+        with:
+          token_format: 'access_token'
+          workload_identity_provider: 'projects/865252980138/locations/global/workloadIdentityPools/githubaction/providers/github'
+          service_account: 'githubaction@disco-bedrock-483611-k9.iam.gserviceaccount.com'
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      #- name: Tfsec
+      # uses: aquasecurity/tfsec-action@v1.0.3
+      #  with:
+      #    working_directory: ${{ env.TF_WORKING_DIR }}
+      #    run: tfsec -m HIGH .
+      
+      - name: Terraform Fmt
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform fmt -check -recursive
+
+      - name: Terraform Init
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform init
+
+      - name: Terraform Validate
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform validate
+
+      - name: Terraform Plan
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: |
+          terraform plan \
+            -out=${TF_PLAN_NAME} \
+            -var-file=${env.ENV}.tfvars \
+            -input=false 
+
+      - name: Upload plan to GCS
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: |
+          gsutil cp ${env.TF_PLAN_NAME} \
+            gs://terraform-plan-bucket/pr-${{ github.event.pull_request.number }}/${TF_PLAN_NAME}
+
