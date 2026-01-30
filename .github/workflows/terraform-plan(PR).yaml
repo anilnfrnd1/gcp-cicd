@@ -80,5 +80,5 @@ jobs:
       - name: Upload Terraform plan to GCS
         working-directory: ${{ env.TF_WORKING_DIR }}
         run: |
-          gsutil cp "${TF_PLAN_NAME}" \
-            gs://terraform-plan-bucket/${ENV}/${TF_PLAN_NAME}
+          gcloud storage cp "${TF_PLAN_NAME}" \
+          gs://terraform-plan-bucket/${ENV}/${TF_PLAN_NAME}
