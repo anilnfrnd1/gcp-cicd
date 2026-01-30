@@ -42,10 +42,10 @@ jobs:
       - name: Download plan from GCS
         working-directory: terraform
         run: |
-          gsutil cp \
-            gs://terraform-plan-bucket/${ENV}/${TF_PLAN_NAME} \
-            ${env.TF_PLAN_NAME}
+          gcloud storage cp \
+          gs://terraform-plan-bucket/${ENV}/${TF_PLAN_NAME} \
+          "${TF_PLAN_NAME}"
             
       - name: Terraform Apply
         working-directory: ${{ env.TF_WORKING_DIR }}
-        run: terraform apply -auto-approve  "$env.TF_PLAN_NAME"
+        run: terraform apply -auto-approve  "${env.TF_PLAN_NAME}"

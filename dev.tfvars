@@ -1,0 +1,6 @@
+project_id     = "disco-bedrock-483611-k9"
+machine_type   = "e2-small"
+zone           = "us-central1-b"
+ssh_user       = "dev"
+ssh_public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHJ2sbGCWi8qkqLAJVUPvKDZIp5H+YEsc+MkbMpfvtqr ak97531@LAP2200-86"
+region         = "us-central1"
