@@ -59,8 +59,8 @@ jobs:
         working-directory: ${{ env.TF_WORKING_DIR }}
         run: |
           terraform plan \
-            -out=${TF_PLAN_NAME} \
-            -var-file=${env.ENV}.tfvars \
+            -out=${ TF_PLAN_NAME } \
+            -var-file=${{ env.ENV }}.tfvars \
             -input=false 
 
       - name: Upload plan to GCS
