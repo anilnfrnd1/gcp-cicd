@@ -12,40 +12,70 @@ permissions:
 env:
   TF_VERSION: "1.6.6"
   TF_WORKING_DIR: terraform
-  TF_PLAN_NAME: tfplan-${{ github.sha }}.out
+  TF_ENV: prod
 
 jobs:
   apply:
     runs-on: ubuntu-latest
 
+    environment:
+      name: prod   # 👈 manual approval gate (recommended)
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v0.4.0'
-        with:
-          token_format: 'access_token'
-          workload_identity_provider: 'projects/865252980138/locations/global/workloadIdentityPools/githubaction/providers/github'
-          service_account: 'githubaction@disco-bedrock-483611-k9.iam.gserviceaccount.com'
 
+      # ----------------------------
+      # Authenticate to GCP (ADC)
+      # ----------------------------
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: projects/865252980138/locations/global/workloadIdentityPools/githubaction/providers/github
+          service_account: githubaction@disco-bedrock-483611-k9.iam.gserviceaccount.com
+
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v1
+
+      # ----------------------------
+      # Setup Terraform
+      # ----------------------------
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ env.TF_VERSION }}
 
+      # ----------------------------
+      # Define plan name (deterministic)
+      # ----------------------------
+      - name: Set plan name
+        run: |
+          echo "TF_PLAN_NAME=tfplan-${ENV}-${GITHUB_SHA}.out" >> $GITHUB_ENV
+
+      # ----------------------------
+      # Terraform Init
+      # ----------------------------
       - name: Terraform Init
         working-directory: ${{ env.TF_WORKING_DIR }}
         run: terraform init
 
+      # ----------------------------
+      # Download plan from GCS
+      # ----------------------------
       - name: Download plan from GCS
-        working-directory: terraform
+        working-directory: ${{ env.TF_WORKING_DIR }}
         run: |
+          set -euo pipefail
+
           gcloud storage cp \
-          gs://terraform-plan-bucket/${ENV}/${TF_PLAN_NAME} \
-          "${TF_PLAN_NAME}"
-            
+            gs://terraform-plan-bucket/${TF_ENV}/${TF_PLAN_NAME} \
+            "${TF_PLAN_NAME}"
+
+      # ----------------------------
+      # Terraform Apply (plan-based)
+      # ----------------------------
       - name: Terraform Apply
         working-directory: ${{ env.TF_WORKING_DIR }}
-        run: terraform apply -auto-approve  "${env.TF_PLAN_NAME}"
+        run: |
+          set -euo pipefail
+          terraform apply "${TF_PLAN_NAME}"
