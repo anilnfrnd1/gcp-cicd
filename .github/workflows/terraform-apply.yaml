@@ -19,14 +19,14 @@ jobs:
     runs-on: ubuntu-latest
 
     environment:
-      name: prod   # 👈 manual approval gate (recommended)
+      name: prod 
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       # ----------------------------
-      # Authenticate to GCP (ADC)
+      # Authenticate to GCP
       # ----------------------------
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
@@ -44,9 +44,17 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ env.TF_VERSION }}
+      
+      # ----------------------------
+      # Select Terraform Workspace
+      # ----------------------------
+      - name: Select Terraform Workspace
+        run: |
+         terraform workspace select "${TF_ENV}" \
+         || terraform workspace new "${TF_ENV}"
 
       # ----------------------------
-      # Define plan name (deterministic)
+      # Define plan name 
       # ----------------------------
       - name: Set plan name
         run: |
