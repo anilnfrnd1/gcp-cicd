@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@v4
 
       # ----------------------------
-      # Authenticate to GCP (WIF)
+      # Authenticate to GCP 
       # ----------------------------
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
