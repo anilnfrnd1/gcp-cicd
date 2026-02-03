@@ -58,7 +58,7 @@ jobs:
       # ----------------------------
       - name: Set plan name
         run: |
-          echo "TF_PLAN_NAME=tfplan-${ENV}-${GITHUB_SHA}.out" >> $GITHUB_ENV
+          echo "TF_PLAN_NAME=tfplan-${TF_ENV}-${GITHUB_SHA}.out" >> $GITHUB_ENV
 
       # ----------------------------
       # Terraform Init

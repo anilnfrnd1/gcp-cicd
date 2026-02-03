@@ -89,4 +89,4 @@ jobs:
         working-directory: ${{ env.TF_WORKING_DIR }}
         run: |
           gcloud storage cp "${TF_PLAN_NAME}" \
-          gs://terraform-plan-bucket/${ENV}/${TF_PLAN_NAME}
+          gs://terraform-plan-bucket/${TF_ENV}/${TF_PLAN_NAME}
