@@ -60,7 +60,7 @@ jobs:
       # ----------------------------
       - name: Terraform Init
         working-directory: ${{ env.TF_WORKING_DIR }}
-        run: terraform init
+        run: terraform init -backend-config="prefix=gcp/${TF_ENV}"
 
       # ----------------------------
       # Terraform Validate
