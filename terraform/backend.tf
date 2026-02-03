@@ -1,5 +1,6 @@
 terraform {
   backend "gcs" {
-    bucket = "terraform_states_2026"
+    bucket  = "terraform-state-bucket"
+    prefix  = "env/${terraform.workspace}"
   }
 }
