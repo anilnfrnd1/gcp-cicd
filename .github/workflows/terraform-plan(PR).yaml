@@ -41,7 +41,15 @@ jobs:
           terraform_version: ${{ env.TF_VERSION }}
 
       # ----------------------------
-      # Define plan name (modern way)
+      # Select Terraform Workspace
+      # ----------------------------
+      - name: Select Terraform Workspace
+        run: |
+         terraform workspace select "${TF_ENV}" \
+         || terraform workspace new "${TF_ENV}"
+
+      # ----------------------------
+      # Define plan name 
       # ----------------------------
       - name: Set Terraform plan name
         run: |
